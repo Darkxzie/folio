@@ -1067,12 +1067,15 @@
     if (glowEl && !reduced) {
       glowEl.style.transform = "translate3d(" + (-28 * pageTarget).toFixed(2) + "vw," + (55 * pageTarget).toFixed(2) + "vh,0)";
     }
-    // portrait starts large, eases down to rail size over the first half-screen of scroll
+    // portrait opens at ~1/4 of the screen, then shrinks to a small icon
+    // hovering above the section nav (the rail is sticky, so it stays put)
     if (portraitEl && !reduced) {
       var mob = window.innerWidth < 880;
-      var s0 = mob ? 128 : 200, s1 = mob ? 68 : 88;
-      var r0 = mob ? 30 : 44, r1 = mob ? 20 : 26;
-      var pp = smooth(clamp(window.scrollY / (window.innerHeight * 0.5)));
+      var s0 = mob ? Math.min(window.innerWidth * 0.35, 170)
+                   : Math.min(window.innerWidth * 0.25, window.innerHeight * 0.4, 290);
+      var s1 = mob ? 52 : 48;
+      var r0 = Math.round(s0 * 0.18), r1 = 14;
+      var pp = smooth(clamp(window.scrollY / (window.innerHeight * 0.6)));
       var size = (s0 + (s1 - s0) * pp).toFixed(1) + "px";
       portraitEl.style.width = size;
       portraitEl.style.height = size;
