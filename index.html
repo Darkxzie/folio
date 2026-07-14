@@ -213,6 +213,11 @@
   }
   nav a:hover, nav a.active { color: var(--accent-text); text-decoration: none; }
   nav a:hover::before, nav a.active::before { width: 36px; background: var(--accent); }
+  nav a.active { font-size: 0.95rem; letter-spacing: 0.12em; }
+  @media (prefers-reduced-motion: no-preference) {
+    nav a { transition: color 0.25s ease, font-size 0.3s ease, letter-spacing 0.3s ease; }
+    nav a::before { transition: width 0.3s ease, background 0.25s ease; }
+  }
 
   .contact { display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem; }
   .contact a {
@@ -262,6 +267,7 @@
   }
   .hero > * { position: relative; }
   .hero h2 {
+    transform-origin: left top;
     font-family: var(--serif);
     font-weight: 400;
     font-size: clamp(1.75rem, 3.4vw, 2.55rem);
@@ -974,6 +980,7 @@
   var progressBar = document.getElementById("progress");
   var glowEl = document.getElementById("glow");
   var portraitEl = document.querySelector(".portrait");
+  var heroH2 = document.querySelector(".hero h2");
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
   var nodes = [], edges = [], W = 0, H = 0, raf;
@@ -1080,6 +1087,8 @@
       portraitEl.style.width = size;
       portraitEl.style.height = size;
       portraitEl.style.borderRadius = (r0 + (r1 - r0) * pp).toFixed(1) + "px";
+      // counterpoint: as the picture shrinks, the headline grows
+      if (heroH2) heroH2.style.transform = "scale(" + (1 + 0.08 * pp).toFixed(4) + ")";
     }
     if (reduced) render(0);
   }
