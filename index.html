@@ -973,6 +973,7 @@
   var canvas = document.getElementById("mol");
   var progressBar = document.getElementById("progress");
   var glowEl = document.getElementById("glow");
+  var portraitEl = document.querySelector(".portrait");
   if (!canvas) return;
   var ctx = canvas.getContext("2d");
   var nodes = [], edges = [], W = 0, H = 0, raf;
@@ -1065,6 +1066,17 @@
     // ambient light drifts across the page as you scroll
     if (glowEl && !reduced) {
       glowEl.style.transform = "translate3d(" + (-28 * pageTarget).toFixed(2) + "vw," + (55 * pageTarget).toFixed(2) + "vh,0)";
+    }
+    // portrait starts large, eases down to rail size over the first half-screen of scroll
+    if (portraitEl && !reduced) {
+      var mob = window.innerWidth < 880;
+      var s0 = mob ? 128 : 200, s1 = mob ? 68 : 88;
+      var r0 = mob ? 30 : 44, r1 = mob ? 20 : 26;
+      var pp = smooth(clamp(window.scrollY / (window.innerHeight * 0.5)));
+      var size = (s0 + (s1 - s0) * pp).toFixed(1) + "px";
+      portraitEl.style.width = size;
+      portraitEl.style.height = size;
+      portraitEl.style.borderRadius = (r0 + (r1 - r0) * pp).toFixed(1) + "px";
     }
     if (reduced) render(0);
   }
